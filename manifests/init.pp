@@ -13,5 +13,19 @@ class squid {
         }
     }
 
+    service{'squid':
+        enable => true,
+        ensure => running,
+        require => Package[squid],
+    }
+
 }
 
+squid::squid_config ( $source ) {
+    file {
+        "/etc/squid/squid.conf":
+        ensure => file, owner => root, group => root, mode => 644,
+        source => "puppet://$servername/${source}",
+        notify => Service[squid],
+    }
+}
