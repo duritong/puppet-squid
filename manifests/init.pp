@@ -21,7 +21,7 @@ class squid {
 
 }
 
-squid::squid_config ( $source ) {
+define squid::squid_config ( $source ) {
     file {
         "/etc/squid/squid.conf":
         ensure => file, owner => root, group => root, mode => 644,
