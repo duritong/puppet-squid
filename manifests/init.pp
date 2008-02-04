@@ -29,3 +29,5 @@ squid::squid_config ( $source ) {
         notify => Service[squid],
     }
 }
+
+
