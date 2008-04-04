@@ -21,11 +21,13 @@ class squid {
 
 }
 
-define squid::squid_config ( $source ) {
+define squid::squid_config () {
     file {
         "/etc/squid/squid.conf":
         ensure => file, owner => root, group => root, mode => 644,
-        source => "puppet://$servername/${source}",
+        source => [ "puppet://$servername/files/squid/${fqdn}/squid.config",
+                    "puppet://$servername/files/squid/squid.config",
+                    "puppet://$servername/squid/squid.config" ],
         notify => Service[squid],
     }
 }
