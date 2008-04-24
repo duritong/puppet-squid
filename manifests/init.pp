@@ -4,26 +4,28 @@
 
 # modules_dir { "squid": }
 
-class squid {
+class squid { 
+    case $operatingsystem {
+        gentoo: { include squid::gentoo }
+        default: { include squid::base }
+    }
+}
+
+
+class squid::base {
     package { 'squid':
         ensure => present,
-        category => $operatingsystem ? {
-            gentoo => 'net-proxy',
-            default => '',
-        }
     }
 
     service{'squid':
         enable => true,
         ensure => running,
+        hasstatus => true,
         require => Package[squid],
     }
 
-}
-
-define squid::squid_config () {
-    file {
-        "/etc/squid/squid.conf":
+    file {"squid_config":
+        path => "/etc/squid/squid.conf",
         ensure => file, owner => root, group => root, mode => 644,
         source => [ "puppet://$server/files/squid/${fqdn}/squid.config",
                     "puppet://$server/files/squid/squid.config",
@@ -32,4 +34,8 @@ define squid::squid_config () {
     }
 }
 
-
+class squid::gentoo inherits squid::base {
+    Package[squid]{
+        category => 'net-proxy',
+    }
+}
