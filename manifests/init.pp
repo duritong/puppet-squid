@@ -9,6 +9,10 @@ class squid {
         gentoo: { include squid::gentoo }
         default: { include squid::base }
     }
+
+    if $use_munin {
+        include munin::plugins::squid
+    }
 }
 
 
@@ -27,9 +31,9 @@ class squid::base {
     file {"squid_config":
         path => "/etc/squid/squid.conf",
         ensure => file, owner => root, group => root, mode => 644,
-        source => [ "puppet://$server/files/squid/${fqdn}/squid.config",
-                    "puppet://$server/files/squid/squid.config",
-                    "puppet://$server/squid/squid.config" ],
+        source => [ "puppet://$server/files/squid/${fqdn}/squid.conf",
+                    "puppet://$server/files/squid/squid.conf",
+                    "puppet://$server/squid/squid.conf" ],
         notify => Service[squid],
     }
 }
