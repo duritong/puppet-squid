@@ -11,7 +11,7 @@ class squid {
     }
 
     if $use_munin {
-        include munin::plugins::squid
+        include squid::munin
     }
 }
 
