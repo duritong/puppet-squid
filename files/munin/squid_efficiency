@@ -10,9 +10,11 @@
 # Authors
 # ~~~~~~~
 # Benjamin Schweizer <code at benjamin-schweizer dot de>
+# duritong <peter.meier at immerda.ch>
 #
 # Changes
 # ~~~~~~~
+# 2008-07-24, duritong: added netcat lookup
 # 2006-11-16, schweizer: removed 5 minutes stats, fixed 5% bug
 # 2006-10-26, schweizer: excluded negative values from result
 # 2006-10-11, schweizer: initial release.
@@ -24,9 +26,14 @@
 #%# family=auto
 #%# capabilities=autoconf
 
+NETCAT='/bin/netcat'
+if [ ! -e $NETCAT ]; then
+    NETCAT='/usr/bin/nc'
+fi
+echo $NETCAT
 
 if [ "$1" = "autoconf" ]; then
-	SQUID_STATS=`printf "GET cache_object://localhost/info HTTP/1.0\n\n" | netcat localhost 3128`
+	SQUID_STATS=`printf "GET cache_object://localhost/info HTTP/1.0\n\n" | ${NETCAT} localhost 3128`
 	if [ -n "${SQUID_STATS}" ]; then
 		echo yes 
 		exit 0
@@ -50,7 +57,7 @@ if [ "$1" = "config" ]; then
 	exit 0
 fi
 
-SQUID_STATS=`printf "GET cache_object://localhost/info HTTP/1.0\n\n" | netcat localhost 3128`
+SQUID_STATS=`printf "GET cache_object://localhost/info HTTP/1.0\n\n" | ${NETCAT} localhost 3128`
 #        Request Hit Ratios:     5min: 0.0%, 60min: 17.4%
 #        Byte Hit Ratios:        5min: 75.0%, 60min: 12.0%
 
