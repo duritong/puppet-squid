@@ -30,7 +30,6 @@ NETCAT='/bin/netcat'
 if [ ! -e $NETCAT ]; then
     NETCAT='/usr/bin/nc'
 fi
-echo $NETCAT
 
 if [ "$1" = "autoconf" ]; then
 	SQUID_STATS=`printf "GET cache_object://localhost/info HTTP/1.0\n\n" | ${NETCAT} localhost 3128`
