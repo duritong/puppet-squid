@@ -7,6 +7,7 @@
 class squid { 
     case $operatingsystem {
         gentoo: { include squid::gentoo }
+        centos: { include squid::centos }
         default: { include squid::base }
     }
 
@@ -41,5 +42,16 @@ class squid::base {
 class squid::gentoo inherits squid::base {
     Package[squid]{
         category => 'net-proxy',
+    }
+}
+
+class squid::centos inherits squid::base {
+    file{'/etc/sysconfig/squid':
+        source => [ "puppet://$server/files/squid/sysconfig/${fqdn}/squid",
+                    "puppet://$server/files/squid/sysconfig/squid",
+                    "puppet://$server/squid/sysconfig/squid" ],
+        require => Package['squid'],
+        notify => Service['squid'],
+        owner => root, group => 0, mode => '0644';
     }
 }
