@@ -1,17 +1,9 @@
 # manifests/munin.pp
 
 class squid::munin {
-    $real_squid_munin_ip = $squid_munin_ip ? {
-        '' => $ipaddress,
-        default => $squid_munin_ip
-    }
-    $real_squid_munin_port = $squid_munin_port ? {
-        '' => 3128,
-        default => $squid_munin_port
-    }
-
-    munin::plugin{ 'squid_cache': config => "user root\nenv.squidhost ${ipaddress}\nenv.squidport ${real_squid_munin_port}"}
-    munin::plugin{ 'squid_icp': config => "user root\nenv.squidhost ${ipaddress}\nenv.squidport ${real_squid_munin_port}"}
-    munin::plugin{ 'squid_requests': config => "user root\nenv.squidhost ${ipaddress}\nenv.squidport ${real_squid_munin_port}"}
-    munin::plugin{ 'squid_traffic': config => "user root\nenv.squidhost ${ipaddress}\nenv.squidport ${real_squid_munin_port}"}
+    munin::plugin{ 'squid_cache': }
+    munin::plugin{ 'squid_icp': }
+    munin::plugin{ 'squid_requests': }
+    munin::plugin{ 'squid_traffic': }
+    munin::remoteplugin{ 'squid_efficiency': source => "puppet://$server/squid/munin/squid_efficiency" }
 }

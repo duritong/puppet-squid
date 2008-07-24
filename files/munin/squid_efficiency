@@ -1,0 +1,65 @@
+#!/bin/sh
+#
+# Copyright (C) 2006 Benjamin Schweizer. All rights reserved.
+#
+#
+# Abstract
+# ~~~~~~~~
+# munin plugin that logs the cache efficiency
+#
+# Authors
+# ~~~~~~~
+# Benjamin Schweizer <code at benjamin-schweizer dot de>
+#
+# Changes
+# ~~~~~~~
+# 2006-11-16, schweizer: removed 5 minutes stats, fixed 5% bug
+# 2006-10-26, schweizer: excluded negative values from result
+# 2006-10-11, schweizer: initial release.
+#
+# Todo
+# ~~~~
+# - we'll see
+#
+#%# family=auto
+#%# capabilities=autoconf
+
+
+if [ "$1" = "autoconf" ]; then
+	SQUID_STATS=`printf "GET cache_object://localhost/info HTTP/1.0\n\n" | netcat localhost 3128`
+	if [ -n "${SQUID_STATS}" ]; then
+		echo yes 
+		exit 0
+	else
+		echo "no (HTTP GET failed)"
+		exit 1
+	fi
+fi
+
+if [ "$1" = "config" ]; then
+	echo 'graph_title Squid Efficiency'
+	echo 'graph_info This graph shows the proxy efficiency.'
+	echo 'graph_category squid'
+	echo "graph_args --lower-limit 0 --upper-limit 100"
+	echo 'graph_vlabel %'
+
+	echo 'request.label request hit'
+
+	echo 'byte.label byte hit'
+
+	exit 0
+fi
+
+SQUID_STATS=`printf "GET cache_object://localhost/info HTTP/1.0\n\n" | netcat localhost 3128`
+#        Request Hit Ratios:     5min: 0.0%, 60min: 17.4%
+#        Byte Hit Ratios:        5min: 75.0%, 60min: 12.0%
+
+SQUID_REQUEST_HIT=`echo "$SQUID_STATS" | grep "Request Hit Ratios" | cut -d ":" -f4 | cut -d "." -f1 | xargs echo`
+if [ ${SQUID_REQUEST_HIT} -lt 1 ]; then SQUID_REQUEST_HIT=0; fi
+SQUID_BYTE_HIT=`echo "$SQUID_STATS" | grep "Byte Hit Ratios" | cut -d ":" -f4 | cut -d "." -f1 | xargs echo`
+if [ ${SQUID_BYTE_HIT} -lt 1 ]; then SQUID_BYTE_HIT=0; fi
+
+echo "request.value ${SQUID_REQUEST_HIT}"
+echo "byte.value ${SQUID_BYTE_HIT}"
+
+# eof.
