@@ -5,5 +5,9 @@ class squid::munin {
     munin::plugin{ 'squid_icp': }
     munin::plugin{ 'squid_requests': }
     munin::plugin{ 'squid_traffic': }
-    munin::plugin::deploy{ 'squid_efficiency': source => "squid/munin/squid_efficiency" }
+    include nc
+    munin::plugin::deploy{'squid_efficiency':
+        source => "squid/munin/squid_efficiency",
+        require => Package['nc'],
+    }
 }
