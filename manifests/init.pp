@@ -34,7 +34,7 @@ class squid::base {
         ensure => file, owner => root, group => root, mode => 644,
         source => [ "puppet://$server/files/squid/${fqdn}/squid.conf",
                     "puppet://$server/files/squid/squid.conf",
-                    "puppet://$server/squid/squid.conf" ],
+                    "puppet://$server/modules/squid/squid.conf" ],
         notify => Service[squid],
     }
 }
@@ -52,7 +52,7 @@ class squid::centos inherits squid::base {
     file{'/etc/sysconfig/squid':
         source => [ "puppet://$server/files/squid/sysconfig/${fqdn}/squid",
                     "puppet://$server/files/squid/sysconfig/squid",
-                    "puppet://$server/squid/sysconfig/squid" ],
+                    "puppet://$server/modules/squid/sysconfig/squid" ],
         require => Package['squid'],
         notify => Service['squid'],
         owner => root, group => 0, mode => '0644';
