@@ -2,7 +2,6 @@ class squid::includedir {
   include ::squid
   file{'/etc/squid/include.d':
     ensure => directory,
-    source => "puppet:///modules/common/empty",
     purge => true,
     recurse => true,
     force => true,
