@@ -2,14 +2,14 @@
 # Copyright (C) 2007 admin@immerda.ch
 #
 
-class squid { 
-    case $operatingsystem {
+class squid {
+    case $::operatingsystem {
         gentoo: { include squid::gentoo }
         centos: { include squid::centos }
         default: { include squid::base }
     }
 
-    if $use_munin {
+    if hiera('use_munin',false) {
         include squid::munin
     }
 }
