@@ -9,8 +9,8 @@ define squid::include($content = undef){
 
   if !$content {
     File["/etc/squid/include.d/${name}"]{
-      source => [ "puppet:///modules/site-squid/include.d/${::fqdn}/${name}",
-                  "puppet:///modules/site-squid/include.d/${name}" ]
+      source => [ "puppet:///modules/site_squid/include.d/${::fqdn}/${name}",
+                  "puppet:///modules/site_squid/include.d/${name}" ]
     }
   } else {
     File["/etc/squid/include.d/${name}"]{

@@ -3,13 +3,13 @@
 #
 
 class squid {
-    case $::operatingsystem {
-        gentoo: { include squid::gentoo }
-        centos: { include squid::centos }
-        default: { include squid::base }
-    }
+  case $::operatingsystem {
+    gentoo: { include squid::gentoo }
+    centos: { include squid::centos }
+    default: { include squid::base }
+  }
 
-    if hiera('use_munin',false) {
-        include squid::munin
-    }
+  if hiera('use_munin',false) {
+    include squid::munin
+  }
 }
