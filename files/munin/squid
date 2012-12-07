@@ -180,8 +180,9 @@ if($ARGV[0] and $ARGV[0] eq "config")
   $config{'squid_ipcache'}{'graph'}{'vlabel'}   = 'Count';
   $config{'squid_ipcache'}{'graph'}{'args'}     = '--base 1000';# --logarithmic';
   $config{'squid_ipcache'}{'graph'}{'category'} = 'squid';
-  $config{'squid_ipcache'}{'graph'}{'order'}    = 'request hits misses numhits neghits invdreqests entries';
-  $config{'squid_ipcache'}{'field'}{'entries'}{'label'}     = 'Entries';
+  $config{'squid_ipcache'}{'graph'}{'order'}    = 'request hits misses numhits neghits invdreqests entries_in_use entries_cached';
+  $config{'squid_ipcache'}{'field'}{'entries_in_use'}{'label'}     = 'Entries In Use';
+  $config{'squid_ipcache'}{'field'}{'entries_cached'}{'label'}     = 'Entries Cached';
   $config{'squid_ipcache'}{'field'}{'request'}{'label'}     = 'Requests';
   $config{'squid_ipcache'}{'field'}{'hits'}{'label'}        = 'Hits';
   $config{'squid_ipcache'}{'field'}{'neghits'}{'label'}     = 'Negative Hits';
@@ -394,13 +395,14 @@ while (my $line = $cm->getline)
 $cm = squid_requst('ipcache');
 while (my $line = $cm->getline) 
 {
-  if($line =~ /IPcache Entries:.*/)         { $data{'squid_ipcache'}{'entries'}     = ($line =~ /(\d+)/g)[0]; next; }
-  if($line =~ /IPcache Requests:.*/)        { $data{'squid_ipcache'}{'request'}     = ($line =~ /(\d+)/g)[0]; next; }
-  if($line =~ /IPcache Hits:.*/)            { $data{'squid_ipcache'}{'hits'}        = ($line =~ /(\d+)/g)[0]; next; }
-  if($line =~ /IPcache Negative Hits:.*/)   { $data{'squid_ipcache'}{'neghits'}     = ($line =~ /(\d+)/g)[0]; next; }
-  if($line =~ /IPcache Numeric Hits:.*/)    { $data{'squid_ipcache'}{'numhits'}     = ($line =~ /(\d+)/g)[0]; next; }
-  if($line =~ /IPcache Misses:.*/)          { $data{'squid_ipcache'}{'misses'}      = ($line =~ /(\d+)/g)[0]; next; }
-  if($line =~ /IPcache Invalid Request:.*/) { $data{'squid_ipcache'}{'invdreqests'} = ($line =~ /(\d+)/g)[0]; next; }
+  if($line =~ /IPcache Entries In Use:.*/)  { $data{'squid_ipcache'}{'entries_in_use'}  = ($line =~ /(\d+)/g)[0]; next; }
+  if($line =~ /IPcache Entries Cached:.*/)  { $data{'squid_ipcache'}{'entries_cached'}  = ($line =~ /(\d+)/g)[0]; next; }
+  if($line =~ /IPcache Requests:.*/)        { $data{'squid_ipcache'}{'request'}       = ($line =~ /(\d+)/g)[0]; next; }
+  if($line =~ /IPcache Hits:.*/)            { $data{'squid_ipcache'}{'hits'}          = ($line =~ /(\d+)/g)[0]; next; }
+  if($line =~ /IPcache Negative Hits:.*/)   { $data{'squid_ipcache'}{'neghits'}       = ($line =~ /(\d+)/g)[0]; next; }
+  if($line =~ /IPcache Numeric Hits:.*/)    { $data{'squid_ipcache'}{'numhits'}       = ($line =~ /(\d+)/g)[0]; next; }
+  if($line =~ /IPcache Misses:.*/)          { $data{'squid_ipcache'}{'misses'}        = ($line =~ /(\d+)/g)[0]; next; }
+  if($line =~ /IPcache Invalid Request:.*/) { $data{'squid_ipcache'}{'invdreqests'}   = ($line =~ /(\d+)/g)[0]; next; }
 }
 
 # -----------------  squid_traffic and squid_requests  --------------------
